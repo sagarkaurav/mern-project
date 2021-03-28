@@ -95,7 +95,7 @@ const updatePlace = async(req, res, next) => {
             newErr.code = 422;
             return next(newErr)
         }
-        if(!place.creator === req.userId) {
+        if(!place.creator.toString() === req.userId) {
             let newErr = new Error("unable to find the place with belongs to users")
             newErr.code = 422;
             return next(newErr)      
@@ -121,7 +121,7 @@ const deletePlace = async(req, res, next) => {
             newErr.code = 422;
             return next(newErr)
         }
-        if(!place.creator === req.userId) {
+        if(!place.creator.toString() === req.userId) {
             let newErr = new Error("unable to find the place with belongs to users")
             newErr.code = 422;
             return next(newErr)      
