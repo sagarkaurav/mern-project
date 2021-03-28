@@ -34,7 +34,7 @@ const getPlaceByUserId = async(req, res, next) => {
         res.status(200).json({places: userWithPlaces.places});
     }
     catch(error) {
-        console.log(err);
+        console.log(error);
         let newErr = new Error("something went wrong. Please try again.");
         newErr.code = 500;
         next(newErr);
