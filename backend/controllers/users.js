@@ -36,7 +36,7 @@ const signup = async(req, res, next) => {
         })
         await newUser.save()
         const token = jwt.sign({id: newUser.id,  email: newUser.email}, 'secretkey')
-        res.status(201).json({user: {name: newUser.name, email: newUser.email, places: newUser.places, image: newUser.image, token: token}})
+        res.status(201).json({user: {id: newUser.id, name: newUser.name, email: newUser.email, places: newUser.places, image: newUser.image, token: token}})
     }
     catch(error) {
         let newError  = new Error("something went wrong. Please try again");
