@@ -1,9 +1,10 @@
-import react, { useReducer, useContext} from 'react';
-
-import {useBackendApi} from '../../hooks/backendApi';
+import react, { useReducer, useContext, useEffect} from 'react';
+import  {useParams} from 'react-router-dom';
 import  AuthContext from '../../context/AuthContext';
 import {useHistory} from 'react-router-dom';
 
+
+import {useBackendApi} from '../../hooks/backendApi';
 
 const FormDataReducer = (state, action) => {
     switch(action.type) {
@@ -36,10 +37,11 @@ const FormDataReducer = (state, action) => {
     
 }
 
-const NewPlace = () => {
+const EditPlace = () => {
     const { isLoading, err, sendRequest } = useBackendApi();
     const authContext = useContext(AuthContext);
     const history = useHistory();
+    const {placeId } = useParams();
     const [formData, dispatch] = useReducer(FormDataReducer, {
         'title': {
             val: '',
@@ -54,22 +56,27 @@ const NewPlace = () => {
             touched: false,
             errorMsg: '',
             validations: [(val) => val.trim().length === 0 ? {status: false, error: 'Description can not be empty'}: {status: true, error: ''}, (val) => val.trim().length < 5 ? { status: false, error:'Description can not be less than 5 characters'}: { status: true, error:''}]
-        },
-        'address': {
-            val: '',
-            isValid: false,
-            touched: false,
-            errorMsg: '',
-            validations: [(val) => val.trim().length === 0 ? {status: false, error: 'Address can not be empty'}: {status: true, error: ''}]
         }
     });
-    const newPlaceSubmitHandler = async (e) => {
+    useEffect(() => {
+        const fetchPlace = async () => {
+            try {
+                const respdata = await sendRequest(`http://localhost:5000/api/v1/places/${placeId}`);
+                dispatch({id: 'title', val: respdata.place.title, type: 'change'})
+                dispatch({id: 'description', val: respdata.place.description, type: 'change'})
+            } catch(err) {
+                alert(err)
+            }            
+        }
+        fetchPlace();
+
+    }, [dispatch, sendRequest, placeId]);
+    const editPlaceSubmitHandler = async (e) => {
         e.preventDefault();
         try {
-            const respdata = await sendRequest('http://localhost:5000/api/v1/places', 'POST', JSON.stringify({
+            const respdata = await sendRequest(`http://localhost:5000/api/v1/places/${placeId}`, 'PATCH', JSON.stringify({
                 title: formData.title.val,
-                description: formData.description.val,
-                address: formData.address.val
+                description: formData.description.val
             }), {
                 'content-Type': 'application/json',
                 'Authorization': 'Bearer ' + authContext.token
@@ -81,28 +88,23 @@ const NewPlace = () => {
     } 
     return (
         <div className="flex max-w-3xl p-8 mx-auto mt-12 bg-white rounded-lg shadow-sm">
-            <form onSubmit={newPlaceSubmitHandler}>
+            <form onSubmit={editPlaceSubmitHandler}>
                 <div className="grid grid-cols-1 gap-4">
                     <label className="block">
                         <span className={`text-gray-700 ${formData.title.isTouched && !formData.title.isValid ? 'text-red-400' :  ""}`  }>Name</span>
-                        <input type="text" name="title" autoComplete="off" onChange={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})}  onBlur={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})} className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Place name"></input>
+                        <input type="text" name="title" value={formData.title.val} autoComplete="off" onChange={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})}  onBlur={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})} className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Place name"></input>
                         {formData.title.isTouched && !formData.title.isValid ? <span className="text-red-400">{formData.title.errorMsg}</span> :  ""}
                     </label>
                     <label className="block">
-                        <span className={`text-gray-700 ${formData.address.isTouched && !formData.address.isValid ? 'text-red-400' :  ""}`  }>Address</span>
-                        <input type="text" name="address" autoComplete="off" onChange={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})}  onBlur={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})} className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Address"></input>
-                        {formData.address.isTouched && !formData.address.isValid ? <span className="text-red-400">{formData.address.errorMsg}</span> :  ""}
-                    </label>
-                    <label className="block">
                         <span className={`text-gray-700 ${formData.description.isTouched && !formData.description.isValid ? 'text-red-400' :  ""}`  }>Description</span>
-                        <textarea name="description" onChange={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})} onBlur={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})}  placeholder="description" className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" rows="3"></textarea>
+                        <textarea name="description" value={formData.description.val} onChange={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})} onBlur={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})}  placeholder="description" className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" rows="3"></textarea>
                         {formData.description.isTouched && !formData.description.isValid ? <span className="text-red-400">{formData.description.errorMsg}</span> :  ""}
                     </label>
-                    <button>Add new place</button>
+                    <button>Edit Place</button>
                 </div>
             </form>
         </div>
     );
 }
 
-export default NewPlace;
+export default EditPlace;

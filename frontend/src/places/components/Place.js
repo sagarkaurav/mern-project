@@ -1,13 +1,15 @@
-import react, { useState, useContext } from 'react';
+import react, { useState, useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import place_default from '../../img/place_default.svg'
 import Map from '../components/Map';
 import AuthContext from '../../context/AuthContext';
 
-const Place = ({name, description, coordinates}) => {
+const Place = ({placeId, name, description, coordinates, creator}) => {
     const authContext = useContext(AuthContext);
     const [mapOpen, setmapOpen] = useState(false);
     const colseMap = () => setmapOpen(false);
     const openMap = () => setmapOpen(true);
+    console.log(authContext.userId, creator, authContext.userId === creator)
     return(
     <>
     {mapOpen && <Map onClose={colseMap}  name={name} coordinates={coordinates} />}
@@ -22,9 +24,9 @@ const Place = ({name, description, coordinates}) => {
                 <button onClick={openMap} className="px-2 py-2 text-white bg-green-400 rounded-lg hover:bg-green-500">VIew on Map</button>
             </div>
             <div className="space-x-4">
-                {authContext.isLoggedIn &&
+                {authContext.userId === creator &&
                 <>
-                <button className="w-20 px-2 py-2 bg-gray-200 rounded-lg hover:text-white hover:bg-yellow-400">Edit</button>
+                <Link to={`/places/${placeId}/edit`} className="w-20 px-2 py-2 bg-gray-200 rounded-lg hover:text-white hover:bg-yellow-400">Edit</Link>
                 <button className="w-20 px-2 py-2 bg-gray-200 rounded-lg hover:text-white hover:bg-red-400">Delete</button></>}
             </div>
         </div>
