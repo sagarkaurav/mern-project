@@ -57,7 +57,7 @@ const createPlace = async (req, res, next) => {
         const newPlace = new Place({
             title: req.body.title,
             description: req.body.description,
-            creator: user,
+            creator: user._id,
             address: req.body.address,
             location: {
                 lat: 100.0000,
@@ -68,7 +68,7 @@ const createPlace = async (req, res, next) => {
         const sess = await mongoose.startSession();
         sess.startTransaction();
         await newPlace.save({session: sess});
-        user.places.push(newPlace);
+        user.places.push(newPlace._id);
         await user.save({session: sess});
         await sess.commitTransaction();
         res.status(201).json({place: newPlace});    
@@ -129,7 +129,7 @@ const deletePlace = async(req, res, next) => {
         const sess = await mongoose.startSession();
         sess.startTransaction();
         await place.remove({session: sess});
-        place.creator.places.pull(place);
+        place.creator.places.pull(place._id);
         await place.creator.save({session: sess})
         await sess.commitTransaction();
         res.json({place})

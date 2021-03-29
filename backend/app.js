@@ -24,6 +24,6 @@ app.use((error, req, res, next) => {
     res.status(error.code || 500)
     res.json({message: error.message || 'An unknown error occured!'});
 });
-mongoose.connect('mongodb+srv://sagar:yolo313@cluster0.k8hae.mongodb.net/location_finder?retryWrites=true&w=majority').then(() => {
+mongoose.connect('mongodb+srv://sagar:yolo313@cluster0.k8hae.mongodb.net/location_finder?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
     app.listen(5000);
 }).catch((error) => console.log(error));
