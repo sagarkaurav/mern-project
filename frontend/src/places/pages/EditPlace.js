@@ -61,7 +61,7 @@ const EditPlace = () => {
     useEffect(() => {
         const fetchPlace = async () => {
             try {
-                const respdata = await sendRequest(`http://localhost:5000/api/v1/places/${placeId}`);
+                const respdata = await sendRequest(`${process.env.REACT_APP_BACKEND_API}/api/v1/places/${placeId}`);
                 dispatch({id: 'title', val: respdata.place.title, type: 'change'})
                 dispatch({id: 'description', val: respdata.place.description, type: 'change'})
             } catch(err) {
@@ -74,7 +74,7 @@ const EditPlace = () => {
     const editPlaceSubmitHandler = async (e) => {
         e.preventDefault();
         try {
-            const respdata = await sendRequest(`http://localhost:5000/api/v1/places/${placeId}`, 'PATCH', JSON.stringify({
+            const respdata = await sendRequest(`${process.env.REACT_APP_BACKEND_API}/api/v1/places/${placeId}`, 'PATCH', JSON.stringify({
                 title: formData.title.val,
                 description: formData.description.val
             }), {

@@ -66,7 +66,7 @@ const NewPlace = () => {
     const newPlaceSubmitHandler = async (e) => {
         e.preventDefault();
         try {
-            const respdata = await sendRequest('http://localhost:5000/api/v1/places', 'POST', JSON.stringify({
+            const respdata = await sendRequest(`${process.env.REACT_APP_BACKEND_API}/api/v1/places`, 'POST', JSON.stringify({
                 title: formData.title.val,
                 description: formData.description.val,
                 address: formData.address.val

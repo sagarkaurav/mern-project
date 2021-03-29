@@ -8,7 +8,7 @@ const Users = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const respdata = await sendRequest('http://localhost:5000/api/v1/users');
+                const respdata = await sendRequest(`${process.env.REACT_APP_BACKEND_API}/api/v1/users`);
                 setUsers(oldUsers => respdata.users);
             }
             catch(err) {

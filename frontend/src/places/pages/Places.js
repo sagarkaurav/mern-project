@@ -15,7 +15,7 @@ const Places = () => {
     useEffect(() => {
         const fetchPlaces = async () => {
             try{
-                const respData = await sendRequest(`http://localhost:5000/api/v1/places/user/${userId}`)
+                const respData = await sendRequest(`${process.env.REACT_APP_BACKEND_API}/api/v1/places/user/${userId}`)
                 setPlaces(respData.places);
             }catch(err) {
                 alert(err.message)
@@ -26,7 +26,7 @@ const Places = () => {
     }, [sendRequest, userId])
     const deletePlace = async (placeId) => {
         try{
-            await sendRequest(`http://localhost:5000/api/v1/places/${placeId}`, 'DELETE', null, {
+            await sendRequest(`${process.env.REACT_APP_BACKEND_API}/api/v1/places/${placeId}`, 'DELETE', null, {
                 'Authorization': 'Bearer ' + authContext.token
             });
             setPlaces(prevPlaces => prevPlaces.filter(p => !(p._id === placeId)));

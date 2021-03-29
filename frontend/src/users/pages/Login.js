@@ -51,7 +51,7 @@ const Login = () => {
     const newLogin = async (e) => {
         e.preventDefault();
         try{
-            const resData =  await sendRequest('http://localhost:5000/api/v1/users/login',  'POST',JSON.stringify({
+            const resData =  await sendRequest(`${process.env.REACT_APP_BACKEND_API}/api/v1/users/login`,  'POST',JSON.stringify({
                 email: formData.email.val,
                 password: formData.password.val
             }),{ 'content-Type': 'application/json'});
