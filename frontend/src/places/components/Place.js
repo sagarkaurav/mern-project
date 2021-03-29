@@ -19,8 +19,8 @@ const Place = ({placeId, name, description, coordinates, creator, deletePlace}) 
             <p>{description}</p>
         </div>
         <div className="flex justify-between px-8 py-2 bg-gray-100 rounded-b-md">
-            <div>
-                <button onClick={openMap} className="px-2 py-2 text-white bg-green-400 rounded-lg hover:bg-green-500">VIew on Map</button>
+            <div className="w-1 h-1">
+                {/* <button onClick={openMap} className="px-2 py-2 text-white bg-green-400 rounded-lg hover:bg-green-500">VIew on Map</button> */}
             </div>
             <div className="space-x-4">
                 {authContext.userId === creator &&
