@@ -4,12 +4,11 @@ import place_default from '../../img/place_default.svg'
 import Map from '../components/Map';
 import AuthContext from '../../context/AuthContext';
 
-const Place = ({placeId, name, description, coordinates, creator}) => {
+const Place = ({placeId, name, description, coordinates, creator, deletePlace}) => {
     const authContext = useContext(AuthContext);
     const [mapOpen, setmapOpen] = useState(false);
     const colseMap = () => setmapOpen(false);
     const openMap = () => setmapOpen(true);
-    console.log(authContext.userId, creator, authContext.userId === creator)
     return(
     <>
     {mapOpen && <Map onClose={colseMap}  name={name} coordinates={coordinates} />}
@@ -27,7 +26,7 @@ const Place = ({placeId, name, description, coordinates, creator}) => {
                 {authContext.userId === creator &&
                 <>
                 <Link to={`/places/${placeId}/edit`} className="w-20 px-2 py-2 bg-gray-200 rounded-lg hover:text-white hover:bg-yellow-400">Edit</Link>
-                <button className="w-20 px-2 py-2 bg-gray-200 rounded-lg hover:text-white hover:bg-red-400">Delete</button></>}
+                <button className="w-20 px-2 py-2 bg-gray-200 rounded-lg hover:text-white hover:bg-red-400" onClick={() => deletePlace(placeId)} >Delete</button></>}
             </div>
         </div>
     </div>

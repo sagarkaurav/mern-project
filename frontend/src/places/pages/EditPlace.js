@@ -100,7 +100,7 @@ const EditPlace = () => {
                         <textarea name="description" value={formData.description.val} onChange={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})} onBlur={(e) => dispatch({id: e.target.name, val: e.target.value, type: 'change'})}  placeholder="description" className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" rows="3"></textarea>
                         {formData.description.isTouched && !formData.description.isValid ? <span className="text-red-400">{formData.description.errorMsg}</span> :  ""}
                     </label>
-                    <button>Edit Place</button>
+                    <button type="submit" disabled={!(formData.title.isValid && formData.description.isValid && !isLoading)}  className="px-2 py-2 text-white bg-green-300 rounded-md disabled:bg-gray-50 disabled:cursor-not-allowed hover:bg-green-500">{isLoading ? 'Updating place...': 'Update Place'}</button>
                 </div>
             </form>
         </div>
