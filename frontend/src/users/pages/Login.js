@@ -63,7 +63,7 @@ const Login = () => {
         }
     } 
     return (
-        <div className="flex max-w-3xl p-8 mx-auto mt-12 bg-white rounded-lg shadow-sm">
+        <div className="flex justify-center max-w-3xl p-8 mx-auto mt-12 bg-white rounded-lg shadow-sm">
             <form disabled={isLoading} onSubmit={newLogin}>
                 <div className="grid grid-cols-1 gap-4">
                     <label className="block">
