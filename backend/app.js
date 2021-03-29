@@ -25,5 +25,5 @@ app.use((error, req, res, next) => {
     res.json({message: error.message || 'An unknown error occured!'});
 });
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
-    app.listen(process.env.PATH ||  5000);
+    app.listen(process.env.PORT ||  5000);
 }).catch((error) => console.log(error));
